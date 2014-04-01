@@ -1,0 +1,185 @@
+﻿@using Timesheet
+@model Timesheet.ReportResultModel
+@*<ul>
+@foreach(var item in Model.ResultsAsTimeReport)
+{
+    <li>@item.Display @item.DisplayTime @item.Date</li>
+}
+</ul>*@
+@if (!Model.ResultsAsTimeReport.Any())
+{
+    <div id="cs-template">
+        <div id="no-data">
+            @GetResource(ResourceKeys.NoData)
+        </div>
+    </div>
+}
+else
+{
+ 
+
+    <div id="cs-template" class="fix-first-column">
+        <table id="tableResourceAllocation" style="width: 100%;">
+            <thead>
+                <tr class="cs-grid-column">
+                    <th class="headcol" style="background: transparent; border: none;">
+                    </th>
+                    @{
+    var countDays = 0;
+    var date = Model.StartDate.Value;
+    while (date <= Model.EndDate)
+    {
+                        <th class="center">
+                            <span class="day-name">@date.ToString("ddd")</span><br />
+                            <span class="date-part">@date.ToString("dd-MMM")</span>
+                        </th>
+        date = date.AddDays(1);
+        countDays++;
+    }
+    <th>Total</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @* <tr>
+                    <td colspan="1" class="headcol">
+                        @GetResource(ResourceKeys.NoData)
+                    </td>
+                    <td colspan="@countDays">
+                        $1$<hr />#1#&nbsp;
+                    </td>
+                </tr>*@
+                @{
+    IEnumerable<IGrouping<int, TimeReportModel>> issues = Model.ResultsAsTimeReport.GroupBy(tr => tr.KeyId);
+    var interval = Convert.ToInt32((Model.EndDate.Value - Model.StartDate.Value).TotalDays) + 1;
+    List<int> totalPerDay = new List<int>(interval);
+    totalPerDay.AddRange(Enumerable.Repeat(0, interval));
+    
+
+    foreach (var issue in issues)
+    {
+        date = Model.StartDate.Value.ClearTime();
+                    <tr class="MainItem" data-key="@issue.Key" data-state="hidden">
+                        <td class="headcol" title="@issue.First().Display">
+                            <span><a href="@NavigationHelper.GetIssueUrl(GeminiContext, issue.First().ReportItem as IssueDto)">
+                                @(((IssueDto)issue.First().ReportItem).IssueKey)</a> @issue.First().Display</span>
+                        </td>
+                        @{
+        int totalMinutes = 0;
+        int currentIndex = 0;
+        while (date <= Model.EndDate.Value)
+        {
+            string cls = "";
+            if (ReportManager.GetWeekends().Contains(date.DayOfWeek))
+            {
+                cls = "weekend";
+            }
+            var today = issue.FirstOrDefault(r => r.KeyId == issue.Key && r.Date.Value.ClearTime() == date);
+            if (today == null)
+            {
+                            <td class="@cls">-</td>
+            }
+            else
+            {
+                            <td class="@cls">
+                                <span class="no-wrap">@today.DisplayTime</span>
+                            </td>
+            }
+            date = date.AddDays(1);
+
+            if (today != null)
+            {
+                totalMinutes += today.Minutes;
+                totalPerDay[currentIndex] = totalPerDay[currentIndex] + today.Minutes;
+            }
+            currentIndex++;
+
+        }
+        <td><b>@string.Format("{0}h{1: #00}m", totalMinutes / 60, totalMinutes % 60)</b></td>
+                    
+                        }
+                    </tr>
+                    
+
+        foreach (TimeReportModel time in issue.SelectMany(i => i.SubItems))
+        {
+                        
+                    <tr class="SubItem1" data-main-key="@issue.Key" data-key="@issue.Key-@time.KeyId" data-state="hidden">
+                        <td class="headcol" title="@time.Display">@time.Display</td>
+                        @{
+            date = Model.StartDate.Value.ClearTime();
+            while (date <= Model.EndDate.Value)
+            {
+                string cls = "";
+                if (ReportManager.GetWeekends().Contains(date.DayOfWeek))
+                {
+                    cls = "weekend";
+                }
+                if (time.Date.Value.ClearTime() != date)
+                {
+                            <td class="@cls">-</td>
+                }
+                else
+                {
+                            <td class="@cls">&nbsp;&nbsp;&nbsp;<span class="no-wrap">@time.DisplayTime</span></td>
+                }
+                date = date.AddDays(1);
+            }
+                        
+                        }
+                    </tr>
+        }
+    }
+                <tr class="MainItem">
+                <td class="headcol">Total</td> 
+               @{
+                    var countDays2 = 0;
+                    var date2 = Model.StartDate.Value;
+                    var totalTotal = 0;
+                    while (date2 <= Model.EndDate.Value)
+                    {
+                        <td><b>@string.Format("{0}h{1: #00}m", totalPerDay[countDays2] / 60, totalPerDay[countDays2] % 60)</b></td>
+                        totalTotal += totalPerDay[countDays2];
+                        date2 = date2.AddDays(1);
+                        countDays2++;
+                    }
+                    <td><b>@string.Format("{0}h{1: #00}m", totalTotal / 60, totalTotal % 60)</b></td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+                
+                
+                
+
+    <script type="text/javascript" language="javascript">
+        $(".SubItem1").hide();
+        $(".SubItem2").hide();
+
+        //$(".fix-first-column").jScrollPane({});
+
+        $(".MainItem").click(function () {
+            var key = $(this).data("key");
+            var state = $(this).data("state");
+
+            if (state == "hidden") {
+                $("tr.SubItem1[data-main-key=" + key + "]").show();
+                $(this).data("state", "shown");
+                $(this).addClass("SubItem1Expanded");
+            }
+            else {
+                $(this).data("state", "hidden");
+                $(this).removeClass("SubItem1Expanded");
+                $("tr.SubItem1[data-main-key=" + key + "]").hide().data("state", "hidden");
+                $("tr.SubItem2[data-main-key=" + key + "]").hide();
+            }
+            //gemini_ui.destroyJScrollPane($(".fix-first-column"));
+            //$(".fix-first-column").jScrollPane({});
+        });
+
+    
+    </script>
+}

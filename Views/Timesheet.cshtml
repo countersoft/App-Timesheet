@@ -1,0 +1,79 @@
+﻿@model Timesheet.ReportsModel
+@using Countersoft.Gemini
+@using Countersoft.Foundation.Commons.Extensions
+@using Countersoft.Foundation.Commons.Enums
+
+<script src="~/assets/scripts/apps/A95F5FEC-1477-4909-AF13-8E600383B03A/Timesheet.js" type="text/javascript"></script>
+
+<div id="page-reports">
+    <div class="right clearfix" id="page-options-box">
+        <div class="box-right size-0">
+            <div id="report-menu">
+                <form name="ReportParams" id="ReportParams">
+                <div class="option vertical-align">
+                    <div class="control-icon gear" title="@GetResource(ResourceKeys.Filter)">
+                    </div>
+                    <div class="options">
+                        <div class="break">&nbsp;</div>
+                        <div class="clearfix">
+                            <div id="ProjectFilterContainer" class="clearfix">
+                                @Html.Label("ProjectIds", GetResource(ResourceKeys.Project))
+                                <div class="left">
+                                    @Html.ListBox("ProjectIds", Model.ProjectList, new { Multiple = "Multiple" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option" id="TimeReportExtraControls">
+                            <div class="break">
+                                &nbsp;
+                            </div>
+                            <div class="clearfix">
+                                <div id="ResourceFilterContainer">
+                                    @Html.Label("ResourceIds", GetResource(ResourceKeys.Resource))
+                                    <div class="left">
+                                        @Html.ListBox("ResourceIds", Model.ResourceList)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="break">&nbsp;</div>
+                            <div class="clearfix">
+                                <div id="TimeFilterContainer" class="clearfix">
+                                    @Html.Label("TimeTypeIds", GetResource(ResourceKeys.TimeType))
+                                    <div class="left">
+                                        @Html.ListBox("TimeTypeIds", Model.TimeList)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="break">&nbsp;</div>
+                            <div class="clearfix">
+                                <div id="TimeFilterContainer" class="clearfix">
+                                    @Html.Label("GroupBy", GetResource(ResourceKeys.GroupBy))
+                                    <div class="left">
+                                        @Html.DropDownList("GroupBy", Model.GroupByList)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="option">                
+                    @Html.TextBox("StartDate", Model.ReportOptions.StartDateDisplay, new { @class = "datepicker", data_date_format = string.Format("{0}", @GeminiContext.User.GeminiDateFormat) })
+                    @Html.TextBox("EndDate", Model.ReportOptions.EndDateDisplay, new { @class = "datepicker", data_date_format = string.Format("{0}", @GeminiContext.User.GeminiDateFormat) })
+                    @Html.DropDownList("Reports", Model.AllReports)
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="report-content" class="clear-both">
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            timesheet_reports.init( { Loading: "@GetResource(ResourceKeys.Loading)" } );
+        });
+    </script>
+</div>
+
+
+
