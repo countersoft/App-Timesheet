@@ -8,5 +8,5 @@
     <publisher>Countersoft</publisher>
     <released>2012-01-23T11:31:00Z</released>
     <javascript>Timesheet.js</javascript>
-    <debug>true</debug>
+    <debug>false</debug>
 </app>
