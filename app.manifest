@@ -4,7 +4,7 @@
     <description>Timesheet</description>
     <version-major>1</version-major>
     <version-minor>0</version-minor>
-    <version-patch>2</version-patch>
+    <version-patch>3</version-patch>
     <publisher>Countersoft</publisher>
     <released>2012-01-23T11:31:00Z</released>
     <javascript>Timesheet.js</javascript>
