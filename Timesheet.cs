@@ -18,6 +18,7 @@ using Countersoft.Gemini.Infrastructure.Managers;
 using System.Linq;
 using System.Collections.ObjectModel;
 using Countersoft.Gemini.Infrastructure.Helpers;
+using Countersoft.Foundation.Commons.Core;
 
 namespace Timesheet
 {
@@ -122,6 +123,9 @@ namespace Timesheet
             _resources = report.GetReourceFilter(form.ResourceIds, form.ProjectIds);
 
             //if (!CanSeeProjectArea(AreaVisibility.Reports)) return GoAway();
+
+            form.StartDate = ParseDateString.GetDateForString(form.StartDateString);
+            form.EndDate = ParseDateString.GetDateForString(form.EndDateString); 
 
             if (form.StartDate.HasValue && form.EndDate.HasValue && form.EndDate < form.StartDate)
                 form.StartDate = form.EndDate.Value.AddDays(-14);

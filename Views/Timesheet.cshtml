@@ -57,8 +57,8 @@
                     </div>
                 </div>
                 <div class="option">                
-                    @Html.TextBox("StartDate", Model.ReportOptions.StartDateDisplay, new { @class = "datepicker", data_date_format = string.Format("{0}", @GeminiContext.User.GeminiDateFormat) })
-                    @Html.TextBox("EndDate", Model.ReportOptions.EndDateDisplay, new { @class = "datepicker", data_date_format = string.Format("{0}", @GeminiContext.User.GeminiDateFormat) })
+                    @Html.TextBox("StartDateString", Model.ReportOptions.StartDateDisplay, new { @class = "datepicker", data_date_format = string.Format("{0}", @GeminiContext.User.GeminiDateFormat) })
+                    @Html.TextBox("EndDateString", Model.ReportOptions.EndDateDisplay, new { @class = "datepicker", data_date_format = string.Format("{0}", @GeminiContext.User.GeminiDateFormat) })
                     @Html.DropDownList("Reports", Model.AllReports)
                 </div>
                 </form>

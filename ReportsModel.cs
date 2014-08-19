@@ -58,6 +58,7 @@ namespace Timesheet
         public Dictionary<string, string> Parameters { get; set; }
 
         public DateTime? EndDate { get; set; }
+        public string EndDateString { get; set; }
         public string EndDateDisplay
         {
             get
@@ -69,6 +70,7 @@ namespace Timesheet
         }
 
         public DateTime? StartDate { get; set; }
+        public string StartDateString { get; set; }
         public string StartDateDisplay
         {
             get { 
