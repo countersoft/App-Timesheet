@@ -125,7 +125,10 @@ namespace Timesheet
             //if (!CanSeeProjectArea(AreaVisibility.Reports)) return GoAway();
 
             form.StartDate = ParseDateString.GetDateForString(form.StartDateString);
-            form.EndDate = ParseDateString.GetDateForString(form.EndDateString); 
+            form.EndDate = ParseDateString.GetDateForString(form.EndDateString);
+
+            if (form.StartDate.HasValue) form.StartDate = form.StartDate.Value.ClearTime();
+            if (form.EndDate.HasValue) form.EndDate = form.EndDate.Value.ClearTime();
 
             if (form.StartDate.HasValue && form.EndDate.HasValue && form.EndDate < form.StartDate)
                 form.StartDate = form.EndDate.Value.AddDays(-14);
@@ -163,7 +166,7 @@ namespace Timesheet
                     break;
             }
 
-            var resultModel = new ReportResultModel { StartDate = options.StartDate, EndDate = options.EndDate, Results = timeReport };
+            var resultModel = new ReportResultModel { StartDate = options.StartDate, EndDate = options.EndDate, StartDateString = options.StartDateString, EndDateString = options.EndDateString, Results = timeReport };
 
             if (options.GroupBy == 1)
             {

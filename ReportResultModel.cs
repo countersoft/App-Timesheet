@@ -13,9 +13,10 @@ namespace Timesheet
         }
 
         public DateTime? StartDate { get; set; }
-
         public DateTime? EndDate { get; set; }
 
+        public string StartDateString { get; set; }
+        public string EndDateString { get; set; }
         public object Results { get; set; }
         public IEnumerable<int> ProjectIds { get; set; }
         public bool Flag { get; set; }

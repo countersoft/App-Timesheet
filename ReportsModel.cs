@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using Countersoft.Foundation.Commons.Core;
 using Countersoft.Gemini.Commons.Dto;
 using Countersoft.Gemini.Infrastructure.Helpers;
 
@@ -52,6 +53,8 @@ namespace Timesheet
             ProjectIds = new List<int>();
             ResourceIds = new List<int>();
             TimeTypeIds = new List<string>();
+            StartDateString = string.Empty;
+            EndDateString = string.Empty;
         }
 
         public int Reports { get; set; }
@@ -63,9 +66,7 @@ namespace Timesheet
         {
             get
             {
-                if (EndDate != null)
-                    return EndDate.Value.ToShortDateString();
-                return string.Empty;
+                return EndDateString;
             }
         }
 
@@ -73,10 +74,8 @@ namespace Timesheet
         public string StartDateString { get; set; }
         public string StartDateDisplay
         {
-            get { 
-                if (StartDate != null) 
-                    return StartDate.Value.ToShortDateString();
-                return string.Empty;
+            get {
+                return StartDateString;
             }
         }
 
