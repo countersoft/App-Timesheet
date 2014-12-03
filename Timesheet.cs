@@ -54,23 +54,44 @@ namespace Timesheet
 
             ReportOptions options = new ReportOptions();
             List<int> selectedProjects = new List<int>();
+            IssuesGridFilter tmp = new IssuesGridFilter();
 
             try
             {
-                if (CurrentCard.Options.ContainsKey(AppGuid))
+                if (CurrentCard.IsNew || !CurrentCard.Options.ContainsKey(AppGuid))
+                {
+                    tmp = new IssuesGridFilter(HttpSessionManager.GetFilter(CurrentCard.Id, CurrentCard.Filter));
+
+                    if (tmp == null)
+                    {
+                        tmp = CurrentCard.Options[AppGuid].FromJson<IssuesGridFilter>();
+                    }
+
+                    if (tmp.Projects == Constants.AllProjectsId.ToString())
+                        selectedProjects.Add(Constants.AllProjectsId);
+                    else
+                        selectedProjects = tmp.GetProjects();
+                }
+                else
                 {
                     options = CurrentCard.Options[AppGuid].FromJson<ReportOptions>();
-                    if (options.ProjectIds.Count > 0)
+                    
+                    if (options.AllProjectsSelected)
+                    {
+                        selectedProjects.Add(Constants.AllProjectsId);
+                    }
+                    else if (options.ProjectIds.Count > 0)
                     {
                         selectedProjects.AddRange(options.ProjectIds);
                     }
                 }
-                else
-                {
-                    options = new ReportOptions();                   
-                }
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+                tmp = new IssuesGridFilter(HttpSessionManager.GetFilter(CurrentCard.Id, IssuesFilter.CreateProjectFilter(UserContext.User.Entity.Id, UserContext.Project.Entity.Id)));
+
+                selectedProjects = tmp.GetProjects();
+            }
 
             var viewableProjects = ProjectManager.GetAppViewableProjects(this);
 
@@ -115,6 +136,7 @@ namespace Timesheet
                 var viewableProjects = ProjectManager.GetAppViewableProjects(this);
 
                 form.ProjectIds = viewableProjects.Count > 0 ? viewableProjects.Select(p => p.Entity.Id).ToList() : new List<int>();
+                form.AllProjectsSelected = true;
                 //if (form.ProjectId == null || form.ProjectId.Length == 0) return GoAway();
             }
 

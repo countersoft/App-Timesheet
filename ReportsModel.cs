@@ -55,6 +55,7 @@ namespace Timesheet
             TimeTypeIds = new List<string>();
             StartDateString = string.Empty;
             EndDateString = string.Empty;
+            AllProjectsSelected = false;
         }
 
         public int Reports { get; set; }
@@ -97,6 +98,6 @@ namespace Timesheet
         public List<int> ResourceIds { get; set; }
         public List<string> TimeTypeIds { get; set; }
         public int GroupBy { get; set; }
-
+        public bool AllProjectsSelected { get; set; }
     }    
 }
