@@ -176,6 +176,8 @@ namespace Timesheet
             var reportManager = new ReportManager(GeminiApp.Cache(), UserContext, GeminiContext);
 
             IEnumerable<TimeReportModel> timeReport = new Collection<TimeReportModel>();
+            // We need to save the selected time types as we will populate those according to the selected project for filtering!
+            var selectedTimeTypes = new List<string>(options.TimeTypeIds);
             switch (options.Reports)
             {
                 case (int)ReportsModel.ReportTypes.TimeReportProject:
@@ -187,7 +189,8 @@ namespace Timesheet
                     timeReport = reportManager.GetTimeReport(options);
                     break;
             }
-
+            // Restore the original time type selection.
+            options.TimeTypeIds = selectedTimeTypes;
             var resultModel = new ReportResultModel { StartDate = options.StartDate, EndDate = options.EndDate, StartDateString = options.StartDateString, EndDateString = options.EndDateString, Results = timeReport };
 
             if (options.GroupBy == 1)
