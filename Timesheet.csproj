@@ -97,6 +97,7 @@
     <None Include="Views\_TimeTypeReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="timesheet.css" />
     <Content Include="Timesheet.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
