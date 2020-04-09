@@ -11,7 +11,6 @@ using System.Security;
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
-[assembly: AllowPartiallyTrustedCallers]
 
 [assembly: AssemblyVersion("6.1.0.4081")]
 [assembly: AssemblyFileVersion("6.1.0.4081")]

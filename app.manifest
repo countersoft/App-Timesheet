@@ -2,11 +2,11 @@
     <guid>A95F5FEC-1477-4909-AF13-8E600383B03A</guid>
     <name>Timesheet</name>
     <description>Timesheet</description>
-    <version-major>3</version-major>
+    <version-major>7</version-major>
     <version-minor>0</version-minor>
     <version-patch>0</version-patch>
     <publisher>Countersoft</publisher>
-    <released>2019-01-10T11:31:00Z</released>
+    <released>2020-04-10T09:00:00Z</released>
     <javascript>Timesheet.js</javascript>
     <debug>false</debug>
 </app>
