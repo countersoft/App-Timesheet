@@ -2,3 +2,6 @@
 tr.SubItem1:hover, tr.SubItem2:hover, tr.MainItem:hover {
 background-color: #fff8dc!important;
 }
+#page-reports div.fix-first-column {
+    margin-left: 255px!important;
+}
